@@ -1,0 +1,26 @@
+language: java
+install: true
+dist: xenial
+
+env:
+  global:
+  - PRODUCT_DB_USERNAME=$PRODUCT_DB_USERNAME
+  - PRODUCT_DB_PASSWORD=$PRODUCT_DB_PASSWORD
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database productdb_test;' -U postgres
+
+script:
+  - ./gradlew clean build
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
